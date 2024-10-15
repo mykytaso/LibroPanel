@@ -13,5 +13,11 @@ class Book(models.Model):
     copies = models.PositiveIntegerField()
     daily_fee = models.DecimalField(max_digits=10, decimal_places=2)
 
+    def borrow_one_copy(self) -> None:
+        self.copies -= 1
+
+    def return_one_copy(self) -> None:
+        self.copies += 1
+
     def __str__(self):
         return f"Title: {self.title}, Author: {self.author}"
