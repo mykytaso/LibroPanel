@@ -25,15 +25,6 @@ class ReturnBorrowingSerializer(serializers.ModelSerializer):
         )
         return attrs
 
-    @transaction.atomic
-    def update(self, instance, validated_data):
-        instance.book.return_one_copy()
-        instance.book.save()
-        instance.actual_return_date = timezone.localdate()
-        instance.is_active = False
-        instance.save()
-        return instance
-
 
 class BorrowingSerializer(serializers.ModelSerializer):
     book = BookSerializer(read_only=True)
@@ -75,7 +66,6 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
-        print(attrs)
         validate_book_availability(
             copies=attrs["book"].copies, error_to_raise=ValidationError
         )
@@ -85,9 +75,3 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
             error_to_raise=ValidationError,
         )
         return attrs
-
-    def create(self, validated_data):
-        borrowing = Borrowing.objects.create(**validated_data)
-        borrowing.book.borrow_one_copy()
-        borrowing.book.save()
-        return borrowing
