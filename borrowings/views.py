@@ -1,10 +1,12 @@
 from django.db import transaction
+from django.utils import timezone
 from rest_framework import viewsets, status, mixins
 from rest_framework.decorators import action as action_decorator
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from books.models import Book
+from borrowings.helpers.telegram import send_message
 from borrowings.models import Borrowing
 from borrowings.serializers import (
     ReturnBorrowingSerializer,
@@ -61,8 +63,16 @@ class BorrowingViewSet(
         if self.request.user:
             serializer.save(user=self.request.user)
 
-        book = Book.objects.get(id=self.request.data["book"])
-        book.borrow_one_copy()
+            book = Book.objects.get(pk=serializer.data["book"])
+            book.borrow_one_copy()
+            book.save()
+
+            send_message(
+                f"📚 Borrowing \n"
+                f"The book '{book.title}' by {book.author} was borrowed by the user "
+                f"{self.request.user} on {serializer.data['borrow_date']}. "
+                f"The expected return date is {serializer.data['expected_return_date']}."
+            )
 
     @transaction.atomic
     @action_decorator(
@@ -72,8 +82,21 @@ class BorrowingViewSet(
         url_path="return",
     )
     def return_book(self, request, pk=None):
-        borrowing = self.get_object()
-        serializer = self.get_serializer(borrowing, data=request.data)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        instance.book.return_one_copy()
+        instance.book.save()
+
+        instance.actual_return_date = timezone.localdate()
+        instance.is_active = False
+
         serializer.save()
+
+        send_message(
+            f"📚 Returning \n"
+            f"The book '{instance.book.title}' by {instance.book.author} was returned by the user "
+            f"{instance.user.email} on {instance.actual_return_date}. "
+        )
         return Response(serializer.data, status=status.HTTP_200_OK)
