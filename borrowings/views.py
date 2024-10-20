@@ -68,7 +68,7 @@ class BorrowingViewSet(
             book.save()
 
             send_message(
-                f"📚 Borrowing \n"
+                f"📙 Borrowing \n"
                 f"The book '{book.title}' by {book.author} was borrowed by the user "
                 f"{self.request.user} on {serializer.data['borrow_date']}. "
                 f"The expected return date is {serializer.data['expected_return_date']}."
@@ -95,7 +95,7 @@ class BorrowingViewSet(
         serializer.save()
 
         send_message(
-            f"📚 Returning \n"
+            f"📗 Returning \n"
             f"The book '{instance.book.title}' by {instance.book.author} was returned by the user "
             f"{instance.user.email} on {instance.actual_return_date}. "
         )
