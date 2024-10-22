@@ -1,6 +1,6 @@
 from celery import shared_task
 
-from borrowings.helpers.overdue import send_overdue_alert_message
+from borrowings.helpers.overdue_alert import send_overdue_alert_message
 
 
 @shared_task
