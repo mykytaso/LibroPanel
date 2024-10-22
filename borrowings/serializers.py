@@ -1,8 +1,7 @@
-from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from books.serializers import BookListSerializer, BookSerializer
+from books.serializers import BookSerializer
 from borrowings.models import Borrowing
 from django.utils import timezone
 
