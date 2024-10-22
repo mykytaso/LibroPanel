@@ -1,7 +1,9 @@
+from decimal import Decimal
+
 from django.utils import timezone
 
 
-def calculate_borrowing_price(borrowing):
+def calculate_borrowing_price(borrowing) -> Decimal:
     return (
         borrowing.book.daily_fee
         * (borrowing.expected_return_date - borrowing.borrow_date).days
