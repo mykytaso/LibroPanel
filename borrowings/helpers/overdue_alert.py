@@ -1,13 +1,8 @@
 from django.utils import timezone
 
+from .borrowing_calculations import calculate_overdue_days, calculate_overdue_fee
 from .telegram import send_message
 from ..models import Borrowing
-
-
-def count_fee(borrowing) -> dict:
-    daily_fee = borrowing.book.daily_fee
-    days = (timezone.localdate() - borrowing.expected_return_date).days
-    return {"days": days, "fee": days * daily_fee}
 
 
 def send_overdue_alert_message():
@@ -38,8 +33,8 @@ def send_overdue_alert_message():
                     f"The book '{instance.book.title}' by {instance.book.author}, "
                     f"borrowed by {instance.user}, is overdue!\n\n"
                     f"Due date: {instance.expected_return_date}\n"
-                    f"{count_fee(instance)["days"]} days overdue\n"
-                    f"Fee: ${count_fee(instance)["fee"]}\n"
+                    f"{calculate_overdue_days(instance)} days overdue\n"
+                    f"Fee: ${calculate_overdue_fee(instance)}\n"
                 )
 
             send_message(message)
