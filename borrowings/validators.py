@@ -24,5 +24,7 @@ def validate_non_past_return_date(
     """
     if expected_return_date <= borrow_date:
         raise error_to_raise(
-            {"expected_return_date": "Expected return date cannot be in the past."}
+            {
+                "expected_return_date": "Expected return date cannot be today or in the past."
+            }
         )
