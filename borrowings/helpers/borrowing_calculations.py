@@ -10,7 +10,7 @@ def calculate_borrowing_price(borrowing) -> Decimal:
     )
 
 
-def calculate_overdue_fee(borrowing) -> dict:
+def calculate_overdue_fee(borrowing) -> Decimal:
     return borrowing.book.daily_fee * calculate_overdue_days(borrowing)
 
 
