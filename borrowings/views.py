@@ -4,6 +4,7 @@ import stripe
 from django.db import transaction
 from django.db.models import Q
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, status, mixins
 from rest_framework.decorators import action as action_decorator
 from rest_framework.permissions import IsAuthenticated
@@ -50,6 +51,7 @@ class BorrowingViewSet(
         user_id = self.request.query_params.get("user_id")
         is_active = self.request.query_params.get("is_active")
 
+        # Staff can view all borrowings, while customers can only see their own.
         queryset = (
             Borrowing.objects.all().select_related("book", "user")
             if self.request.user.is_staff
@@ -58,13 +60,33 @@ class BorrowingViewSet(
             )
         )
 
+        # All logged-in users can filter borrowings by is_active
         if is_active:
             queryset = queryset.filter(is_active=self.param_to_bool(is_active))
 
+        # Staff can additionally filter borrowings by user_id
         if user_id and self.request.user.is_staff:
             queryset = queryset.filter(user_id=user_id)
 
         return queryset
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "is_active",
+                type=bool,
+                description="Filter by is_active. Choose true or false.",
+            ),
+            OpenApiParameter(
+                "user_id",
+                type=int,
+                description="Filter by user_id "
+                "(This functionality available only for Staff)",
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def get_serializer_class(self):
         if self.action == "create":
