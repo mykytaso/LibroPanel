@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "books",
     "users",
     "borrowings",
+    "payments",
 ]
 
 MIDDLEWARE = [
@@ -152,3 +153,8 @@ CELERY_RESULT_BACKEND = "redis://localhost:6379/"
 CELERY_TIMEZONE = "UTC"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
+
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_SUCCESS_URL = os.getenv("STRIPE_SUCCESS_URL")
+STRIPE_CANCEL_URL = os.getenv("STRIPE_CANCEL_URL")

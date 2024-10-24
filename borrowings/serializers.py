@@ -1,8 +1,7 @@
-from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from books.serializers import BookListSerializer, BookSerializer
+from books.serializers import BookSerializer
 from borrowings.models import Borrowing
 from django.utils import timezone
 
@@ -27,7 +26,7 @@ class ReturnBorrowingSerializer(serializers.ModelSerializer):
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
-    book = BookSerializer(read_only=True)
+    book = serializers.CharField(source="book.title", read_only=True)
 
     class Meta:
         model = Borrowing
@@ -45,6 +44,10 @@ class BorrowingSerializer(serializers.ModelSerializer):
             "actual_return_date",
             "is_active",
         )
+
+
+class BorrowingDetailSerializer(BorrowingSerializer):
+    book = BookSerializer(read_only=True)
 
 
 class BorrowingCreateSerializer(serializers.ModelSerializer):
