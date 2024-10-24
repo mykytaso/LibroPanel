@@ -6,35 +6,34 @@ from ..models import Borrowing
 
 
 def send_overdue_alert_message():
-    instances = Borrowing.objects.select_related("user", "book")
+    borrowings = Borrowing.objects.select_related("user", "book")
     message = ""
     count = 0
 
-    for instance in instances:
-        if instance.is_active:
-            if instance.expected_return_date == timezone.localdate():
+    for borrowing in borrowings:
+        if borrowing.is_active:
+            if borrowing.expected_return_date == timezone.localdate():
                 message = (
-                    f"📕 Return Reminder ⚠️\n\n"
-                    f"The book '{instance.book.title}' by {instance.book.author} "
-                    f"borrowed by user: {instance.user} should be returned today."
+                    f"⚠️ Return Reminder\n"
+                    f"User {borrowing.user} should return the book "
+                    f"'{borrowing.book.title}' today."
                 )
             elif (
-                instance.expected_return_date
+                borrowing.expected_return_date
                 == timezone.localdate() + timezone.timedelta(days=1)
             ):
                 message = (
-                    f"📕 Return Reminder ⚠️\n\n"
-                    f"The book '{instance.book.title}' by {instance.book.author} "
-                    f"borrowed by user: {instance.user} should be returned tomorrow."
+                    f"⚠️ Return Reminder️\n"
+                    f"User {borrowing.user} should return the book "
+                    f"'{borrowing.book.title}' tomorrow."
                 )
-            elif instance.expected_return_date < timezone.localdate():
+            elif borrowing.expected_return_date < timezone.localdate():
                 message = (
-                    f"📕 Overdue Alert ⚠️\n\n"
-                    f"The book '{instance.book.title}' by {instance.book.author}, "
-                    f"borrowed by {instance.user}, is overdue!\n\n"
-                    f"Due date: {instance.expected_return_date}\n"
-                    f"{calculate_overdue_days(instance)} days overdue\n"
-                    f"Fee: ${calculate_overdue_fee(instance)}\n"
+                    f"⚠️ Overdue Alert\n"
+                    f"User {borrowing.user} should return the overdue book '{borrowing.book.title}' as soon as possible!\n\n"
+                    f"Due date: {borrowing.expected_return_date}\n"
+                    f"Overdue: {calculate_overdue_days(borrowing)} days\n"
+                    f"Fee: ${calculate_overdue_fee(borrowing)}\n"
                 )
 
             send_message(message)
