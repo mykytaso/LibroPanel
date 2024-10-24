@@ -29,6 +29,14 @@ def sample_book(**params) -> Book:
 
 
 class UnauthenticatedBookTests(TestCase):
+    payload = {
+        "title": "Test_book_title",
+        "author": "Test_book_author",
+        "cover": Book.CoverChoices.HARD,
+        "copies": 3,
+        "daily_fee": Decimal("0.99"),
+    }
+
     def setUp(self):
         self.client = APIClient()
 
@@ -37,15 +45,7 @@ class UnauthenticatedBookTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_create_book_not_allowed_for_unauthorized(self):
-        payload = {
-            "title": "Test_book_title",
-            "author": "Test_book_author",
-            "cover": Book.CoverChoices.HARD,
-            "copies": 3,
-            "daily_fee": Decimal("0.99"),
-        }
-        res = self.client.post(BOOK_URL, payload)
-
+        res = self.client.post(BOOK_URL, self.payload)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
@@ -89,6 +89,14 @@ class CustomerBookApiTests(TestCase):
 
 
 class AdminBookApiTests(TestCase):
+    payload = {
+        "title": "Test_book_title",
+        "author": "Test_book_author",
+        "cover": Book.CoverChoices.HARD,
+        "copies": 3,
+        "daily_fee": Decimal("0.99"),
+    }
+
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
@@ -99,14 +107,7 @@ class AdminBookApiTests(TestCase):
         self.client.force_authenticate(self.user)
 
     def test_create_book_allowed_for_staff(self):
-        payload = {
-            "title": "Test_book_title",
-            "author": "Test_book_author",
-            "cover": Book.CoverChoices.HARD,
-            "copies": 3,
-            "daily_fee": Decimal("0.99"),
-        }
-        res = self.client.post(BOOK_URL, payload)
+        res = self.client.post(BOOK_URL, self.payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
     def test_update_book_allowed_for_staff(self):
@@ -138,3 +139,7 @@ class AdminBookApiTests(TestCase):
         url = detail_url(book.id)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_book_str_method(self):
+        book = Book.objects.create(**self.payload)
+        self.assertEqual(str(book), "Title: Test_book_title, Author: Test_book_author")
