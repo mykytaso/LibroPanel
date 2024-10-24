@@ -14,20 +14,10 @@ class PaymentSerializer(serializers.ModelSerializer):
             "payment_type",
             "borrowing",
             "amount_to_pay",
-        )
-
-
-class PaymentDetailSerializer(serializers.ModelSerializer):
-    borrowing = BorrowingSerializer()
-
-    class Meta:
-        model = Payment
-        fields = (
-            "id",
-            "payment_status",
-            "payment_type",
-            "borrowing",
-            "session_url",
             "session_id",
-            "amount_to_pay",
+            "session_url",
         )
+
+
+class PaymentDetailSerializer(PaymentSerializer):
+    borrowing = BorrowingSerializer()
