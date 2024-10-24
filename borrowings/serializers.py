@@ -26,7 +26,7 @@ class ReturnBorrowingSerializer(serializers.ModelSerializer):
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
-    book = BookSerializer(read_only=True)
+    book = serializers.CharField(source="book.title", read_only=True)
 
     class Meta:
         model = Borrowing
@@ -44,6 +44,10 @@ class BorrowingSerializer(serializers.ModelSerializer):
             "actual_return_date",
             "is_active",
         )
+
+
+class BorrowingDetailSerializer(BorrowingSerializer):
+    book = BookSerializer(read_only=True)
 
 
 class BorrowingCreateSerializer(serializers.ModelSerializer):
