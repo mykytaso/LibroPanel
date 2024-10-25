@@ -102,29 +102,26 @@ class BorrowingViewSet(
         user = self.request.user
 
         # Checks whether user has unpaid (pending and expired) checkout sessions
-        db_unpaid_checkout_sessions = Payment.objects.filter(
+        db_unpaid_checkout_session = Payment.objects.filter(
             Q(payment_status=Payment.PaymentStatus.PENDING)
             | Q(payment_status=Payment.PaymentStatus.EXPIRED),
             borrowing__user=user,
-        )
+        ).first()
 
-        if db_unpaid_checkout_sessions:
-            # Sends telegram message about unpaid checkout sessions of the user
-            db_unpaid_sessions_count = db_unpaid_checkout_sessions.count()
+        if db_unpaid_checkout_session:
+            # Sends telegram message about unpaid checkout session of the user
             send_message(
-                f"⚠️ Warning\n"
-                f"User {user} has {db_unpaid_sessions_count} unpaid checkout "
-                f"session{'s' if db_unpaid_sessions_count > 1 else ''}."
+                f"⚠️ <b>Warning</b>\n"
+                f"User <b>{user}</b> has unpaid checkout session:\n"
+                f"{db_unpaid_checkout_session}\n"
+                f"<a href='{db_unpaid_checkout_session.session_url}'><b>Pay Now</b></a>"
             )
 
-            # Returns a response with list of links to all unpaid checkout sessions of the user
+            # Returns a response with link to unpaid checkout session
             return Response(
                 {
-                    "detail": "To make a new borrowing, you need to pay for all unpaid checkout sessions.",
-                    "stripe_session_urls": [
-                        db_session.session_url
-                        for db_session in db_unpaid_checkout_sessions
-                    ],
+                    "detail": "To make a new borrowing, you need to pay for unpaid checkout session.",
+                    "stripe_session_url": db_unpaid_checkout_session.session_url,
                 },
                 status=status.HTTP_200_OK,
             )
@@ -147,9 +144,10 @@ class BorrowingViewSet(
         )
 
         send_message(
-            f"📙 Borrowing \n"
-            f"User {user} has borrowed the book: '{book.title}' on {serializer.data['borrow_date']}. "
-            f"The expected return date is {serializer.data['expected_return_date']}."
+            f"📙 <b>Borrowing</b> \n"
+            f"User <b>{user}</b> has borrowed the book: <b>{book.title}</b> on {serializer.data['borrow_date']}.\n"
+            f"Expected return date: {serializer.data['expected_return_date']}.\n"
+            f"<a href='{stripe_checkout_session["url"]}'><b>Pay</b></a>"
         )
 
         return Response(
@@ -203,9 +201,9 @@ class BorrowingViewSet(
             )
 
         send_message(
-            f"📗 Returning \n"
-            f"User {borrowing.user.email} has returned the "
-            f"book: '{borrowing.book.title}' on {borrowing.actual_return_date}."
+            f"📗 <b>Returning</b> \n"
+            f"User <b>{borrowing.user.email}</b> has returned the "
+            f"book: <b>{borrowing.book.title}</b> on {borrowing.actual_return_date}."
         )
 
         return response
