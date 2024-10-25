@@ -36,7 +36,7 @@ class PaymentViewSet(
 class PaymentRenewView(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def patch(self, request, pk: int) -> Response:
+    def post(self, request, pk: int) -> Response:
         db_checkout_session = Payment.objects.get(pk=pk)
 
         # If the checkout session is expired: creates a new Stripe checkout session and updates it in the database
