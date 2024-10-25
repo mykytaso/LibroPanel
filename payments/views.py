@@ -75,11 +75,11 @@ class PaymentSuccessView(APIView):
         db_checkout_session.save()
 
         send_message(
-            f"💸 Payment received\n"
-            f"User {db_checkout_session.borrowing.user} has made "
+            f"💸 <b>Payment received</b>\n"
+            f"User <b>{db_checkout_session.borrowing.user}</b> has made "
             f"{db_checkout_session.payment_type.replace('_', ' ')} "
-            f"${db_checkout_session.amount_to_pay} for the "
-            f"book: '{db_checkout_session.borrowing.book.title}'"
+            f"<b>${db_checkout_session.amount_to_pay}</b> for the "
+            f"book: <b>{db_checkout_session.borrowing.book.title}</b>"
         )
 
         return Response({"detail": "Payment was successful!"})
