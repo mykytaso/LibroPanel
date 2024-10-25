@@ -49,7 +49,7 @@ class UnauthenticatedBookTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class CustomerBookApiTests(TestCase):
+class CustomerBookTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
@@ -88,7 +88,7 @@ class CustomerBookApiTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
-class AdminBookApiTests(TestCase):
+class AdminBookTests(TestCase):
     payload = {
         "title": "Test_book_title",
         "author": "Test_book_author",
