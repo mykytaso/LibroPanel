@@ -14,23 +14,23 @@ def send_overdue_alert_message():
         if borrowing.is_active:
             if borrowing.expected_return_date == timezone.localdate():
                 message = (
-                    f"⚠️ Return Reminder\n"
-                    f"User {borrowing.user} should return the book "
-                    f"'{borrowing.book.title}' today."
+                    f"⚠️ <b>Return Reminder</b>\n"
+                    f"User <b>{borrowing.user}</b> should return the book "
+                    f"<b>{borrowing.book.title}</b> <b>today</b>."
                 )
             elif (
                 borrowing.expected_return_date
                 == timezone.localdate() + timezone.timedelta(days=1)
             ):
                 message = (
-                    f"⚠️ Return Reminder️\n"
-                    f"User {borrowing.user} should return the book "
-                    f"'{borrowing.book.title}' tomorrow."
+                    f"⚠️ <b>Return Reminder️</b>\n"
+                    f"User <b>{borrowing.user}</b> should return the book "
+                    f"<b>{borrowing.book.title}</b> <b>tomorrow</b>."
                 )
             elif borrowing.expected_return_date < timezone.localdate():
                 message = (
-                    f"⚠️ Overdue Alert\n"
-                    f"User {borrowing.user} should return the overdue book '{borrowing.book.title}' as soon as possible!\n\n"
+                    f"⚠️ <b>Overdue Alert</b>\n"
+                    f"User <b>{borrowing.user}</b> should return the overdue book <b>{borrowing.book.title}</b> as soon as possible!\n\n"
                     f"Due date: {borrowing.expected_return_date}\n"
                     f"Overdue: {calculate_overdue_days(borrowing)} days\n"
                     f"Fee: ${calculate_overdue_fee(borrowing)}\n"
@@ -40,4 +40,4 @@ def send_overdue_alert_message():
             count += 1
 
     if count == 0:
-        send_message("🎉 No borrowings overdue today!")
+        send_message("🎉 <b>No borrowings overdue today!</b>")
