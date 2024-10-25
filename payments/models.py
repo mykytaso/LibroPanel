@@ -42,6 +42,6 @@ class Payment(models.Model):
 
     def __str__(self):
         return (
-            f"Payment for Borrowing ID {self.borrowing_id}. "
-            f"Type: {self.payment_type}. Status: {self.payment_status}."
+            f"ID: {self.borrowing_id}\n"
+            f"Type: {self.payment_type}\nStatus: {self.payment_status}"
         )
