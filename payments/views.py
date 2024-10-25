@@ -34,6 +34,8 @@ class PaymentViewSet(
 
 
 class PaymentRenewView(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def patch(self, request, pk: int) -> Response:
         db_checkout_session = Payment.objects.get(pk=pk)
 
