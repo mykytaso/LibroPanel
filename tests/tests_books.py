@@ -7,8 +7,23 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from books.models import Book
+from books.serializers import BookSerializer, BookListSerializer
 
 BOOK_URL = reverse("books:book-list")
+PAYLOAD_01 = {
+    "title": "Test_book_title",
+    "author": "Test_book_author",
+    "cover": Book.CoverChoices.HARD,
+    "copies": 3,
+    "daily_fee": Decimal("0.99"),
+}
+PAYLOAD_02 = {
+    "title": "Updated Book Title",
+    "author": "Updated Book Author",
+    "cover": Book.CoverChoices.SOFT,
+    "copies": 10,
+    "daily_fee": Decimal("2.99"),
+}
 
 
 def detail_url(book_id):
@@ -29,23 +44,33 @@ def sample_book(**params) -> Book:
 
 
 class UnauthenticatedBookTests(TestCase):
-    payload = {
-        "title": "Test_book_title",
-        "author": "Test_book_author",
-        "cover": Book.CoverChoices.HARD,
-        "copies": 3,
-        "daily_fee": Decimal("0.99"),
-    }
 
     def setUp(self):
         self.client = APIClient()
 
-    def test_auth_not_required(self):
+    def test_books_list(self):
+        sample_book()
         res = self.client.get(BOOK_URL)
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-    def test_create_book_not_allowed_for_unauthorized(self):
-        res = self.client.post(BOOK_URL, self.payload)
+        books = Book.objects.all()
+        serializer = BookListSerializer(books, many=True)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data.get("results"), serializer.data)
+
+    def test_book_detail(self):
+        book = sample_book()
+        url = detail_url(book.id)
+
+        res = self.client.get(url)
+
+        serializer = BookSerializer(book)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data, serializer.data)
+
+    def test_book_create_not_allowed_for_unauthorized(self):
+        res = self.client.post(BOOK_URL, PAYLOAD_01)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
@@ -59,44 +84,18 @@ class CustomerBookTests(TestCase):
         )
         self.client.force_authenticate(self.user)
 
-    def test_create_book_not_allowed_for_customers(self):
-        payload = {
-            "title": "Test_book_title",
-            "author": "Test_book_author",
-            "cover": Book.CoverChoices.HARD,
-            "copies": 3,
-            "daily_fee": Decimal("0.99"),
-        }
-        res = self.client.post(BOOK_URL, payload)
-
+    def test_book_create_not_allowed_for_customers(self):
+        res = self.client.post(BOOK_URL, PAYLOAD_01)
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_update_book_not_allowed_for_customers(self):
-        book = sample_book()
-        url = detail_url(book.id)
+    def test_book_update_not_allowed_for_customers(self):
+        url = detail_url(sample_book().id)
 
-        updated_payload = {
-            "title": "Updated Book Title",
-            "author": "Updated Book Author",
-            "cover": Book.CoverChoices.SOFT,
-            "copies": 10,
-            "daily_fee": Decimal("2.99"),
-        }
-
-        response = self.client.patch(url, updated_payload)
-
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        res = self.client.patch(url, PAYLOAD_02)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class AdminBookTests(TestCase):
-    payload = {
-        "title": "Test_book_title",
-        "author": "Test_book_author",
-        "cover": Book.CoverChoices.HARD,
-        "copies": 3,
-        "daily_fee": Decimal("0.99"),
-    }
-
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
@@ -106,40 +105,32 @@ class AdminBookTests(TestCase):
         )
         self.client.force_authenticate(self.user)
 
-    def test_create_book_allowed_for_staff(self):
-        res = self.client.post(BOOK_URL, self.payload)
+    def test_book_create_allowed_for_staff(self):
+        res = self.client.post(BOOK_URL, PAYLOAD_01)
+        book = Book.objects.get(pk=res.data["id"])
+
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
-    def test_update_book_allowed_for_staff(self):
-        book = sample_book()
-        url = detail_url(book.id)
+        for key in PAYLOAD_01:
+            self.assertEqual(getattr(book, key), PAYLOAD_01[key])
 
-        updated_payload = {
-            "title": "Updated Book Title",
-            "author": "Updated Book Author",
-            "cover": Book.CoverChoices.SOFT,
-            "copies": 10,
-            "daily_fee": Decimal("2.99"),
-        }
-
-        response = self.client.patch(url, updated_payload)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_book_update_allowed_for_staff(self):
+        res = self.client.post(BOOK_URL, PAYLOAD_01)
+        book = Book.objects.get(pk=res.data["id"])
+        res_updated = self.client.patch(detail_url(book.id), PAYLOAD_02)
 
         book.refresh_from_db()
 
-        self.assertEqual(book.title, updated_payload["title"])
-        self.assertEqual(book.author, updated_payload["author"])
-        self.assertEqual(book.cover, updated_payload["cover"])
-        self.assertEqual(book.copies, updated_payload["copies"])
-        self.assertEqual(book.daily_fee, updated_payload["daily_fee"])
+        self.assertEqual(res_updated.status_code, status.HTTP_200_OK)
+        for key in PAYLOAD_02:
+            self.assertEqual(getattr(book, key), PAYLOAD_02[key])
 
-    def test_delete_book_not_allowed_for_staff(self):
+    def test_book_delete_not_allowed_for_staff(self):
         book = sample_book()
         url = detail_url(book.id)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_book_str_method(self):
-        book = Book.objects.create(**self.payload)
+        book = Book.objects.create(**PAYLOAD_01)
         self.assertEqual(str(book), "Title: Test_book_title, Author: Test_book_author")
