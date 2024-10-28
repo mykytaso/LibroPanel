@@ -1,10 +1,10 @@
 import stripe
-from django.conf import settings
+from rest_framework.reverse import reverse
 
 from payments.models import Payment
 
 
-def create_checkout_session(borrowing, amount_to_pay, payment_type):
+def create_checkout_session(request, borrowing, amount_to_pay, payment_type):
 
     # Creates Stripe checkout session
     stripe_checkout_session = stripe.checkout.Session.create(
@@ -24,8 +24,14 @@ def create_checkout_session(borrowing, amount_to_pay, payment_type):
             }
         ],
         mode="payment",
-        success_url=(settings.STRIPE_SUCCESS_URL + "?session_id={CHECKOUT_SESSION_ID}"),
-        cancel_url=(settings.STRIPE_CANCEL_URL + "?session_id={CHECKOUT_SESSION_ID}"),
+        success_url=(
+            request.build_absolute_uri(reverse("payment:checkout-success"))
+            + "?session_id={CHECKOUT_SESSION_ID}"
+        ),
+        cancel_url=(
+            request.build_absolute_uri(reverse("payment:checkout-cancel"))
+            + "?session_id={CHECKOUT_SESSION_ID}"
+        ),
     )
 
     # Updates or creates checkout session (payment object) in db
