@@ -42,6 +42,7 @@ class PaymentRenewView(APIView):
         # If the checkout session is expired: creates a new Stripe checkout session and updates it in the database
         if db_checkout_session.payment_status == Payment.PaymentStatus.EXPIRED:
             renewed_stripe_checkout_session = create_checkout_session(
+                request=self.request,
                 borrowing=db_checkout_session.borrowing,
                 amount_to_pay=db_checkout_session.amount_to_pay,
                 payment_type=db_checkout_session.payment_type,

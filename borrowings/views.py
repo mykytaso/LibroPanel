@@ -138,6 +138,7 @@ class BorrowingViewSet(
 
         # Creates Stripe checkout session and payment object in db
         stripe_checkout_session = create_checkout_session(
+            request=self.request,
             borrowing=borrowing,
             amount_to_pay=calculate_borrowing_price(borrowing),
             payment_type=Payment.PaymentType.BORROWING_PAYMENT,
@@ -187,6 +188,7 @@ class BorrowingViewSet(
         # Creates Stripe checkout session and updates payment object in db (if overdue fee > 0)
         if overdue_fee > Decimal(0):
             stripe_checkout_session = create_checkout_session(
+                request=self.request,
                 borrowing=borrowing,
                 amount_to_pay=calculate_overdue_fee(borrowing),
                 payment_type=Payment.PaymentType.OVERDUE_FEE_PAYMENT,
