@@ -35,7 +35,6 @@ class BorrowingViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    mixins.DestroyModelMixin,
 ):
     queryset = Borrowing.objects.all()
     permission_classes = [IsAuthenticated]
