@@ -49,7 +49,7 @@ class PaymentRenewView(APIView):
 
             return Response(
                 {
-                    "detail": "Checkout session renewed successfully",
+                    "detail": "Checkout session has been successfully renewed",
                     "stripe_session_url": renewed_stripe_checkout_session["url"],
                 },
                 status=status.HTTP_200_OK,
