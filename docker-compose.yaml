@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:alpine3.20
+    volumes:
+      - my_db:$PGDATA
+    env_file:
+      - .env
+
+  app:
+    build: .
+    command: >
+      sh -c "python manage.py wait_for_db &&
+          python manage.py makemigrations &&
+          python manage.py migrate &&
+          python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./:/code
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  redis:
+    image: "redis:alpine"
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py wait_for_db &&
+      celery -A library_service worker -l INFO"
+    depends_on:
+      - app
+      - redis
+      - db
+    restart: on-failure
+    env_file:
+      - .env
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py wait_for_db &&
+      celery -A library_service beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    depends_on:
+      - app
+      - redis
+      - db
+    restart: on-failure
+    env_file:
+      - .env
+
+volumes:
+  my_db:
