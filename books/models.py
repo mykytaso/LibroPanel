@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 
 
 class Book(models.Model):
@@ -12,6 +13,14 @@ class Book(models.Model):
     cover = models.CharField(max_length=50, choices=CoverChoices.choices)
     copies = models.PositiveIntegerField()
     daily_fee = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["title", "author"],
+                name="unique_title_and_author",
+            ),
+        ]
 
     def borrow_one_copy(self) -> None:
         self.copies -= 1
