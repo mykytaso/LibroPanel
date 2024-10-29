@@ -155,7 +155,7 @@ class CustomerBorrowingsTests(TestCase):
     def test_borrowing_delete_not_allowed(self) -> None:
         borrowing = sample_borrowing()
         url = detail_url(borrowing.id)
-        res = self.client.patch(url)
+        res = self.client.delete(url)
         self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_borrowing_str_method(self):
@@ -197,3 +197,9 @@ class AdminBorrowingTests(TestCase):
             serializer_borrowing_user_id_sample.data,
             res.data.get("results"),
         )
+
+    def test_borrowing_delete_not_allowed(self) -> None:
+        borrowing = sample_borrowing()
+        url = detail_url(borrowing.id)
+        res = self.client.delete(url)
+        self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)

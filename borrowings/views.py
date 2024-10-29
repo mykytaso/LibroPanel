@@ -35,7 +35,6 @@ class BorrowingViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
-    mixins.DestroyModelMixin,
 ):
     queryset = Borrowing.objects.all()
     permission_classes = [IsAuthenticated]
@@ -148,7 +147,7 @@ class BorrowingViewSet(
             f"📙 <b>Borrowing</b> \n"
             f"User <b>{user}</b> has borrowed the book: <b>{book.title}</b> on {serializer.data['borrow_date']}.\n"
             f"Expected return date: {serializer.data['expected_return_date']}.\n"
-            f"<a href='{stripe_checkout_session["url"]}'><b>Pay</b></a>"
+            f"<a href='{stripe_checkout_session['url']}'><b>Pay</b></a>"
         )
 
         return Response(
