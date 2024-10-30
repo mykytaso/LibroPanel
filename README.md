@@ -179,8 +179,7 @@ Replace `<your token>` with your token.<br>
 
 ![Stripe](docs/images/stripe.png)
 
-![Telegram](docs/images/telegram.png)
-
+<img src="docs/images/telegram.png" alt="ModHeader" width="500"/>
 
 <br>
 
