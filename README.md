@@ -165,11 +165,23 @@ Replace `<your token>` with your token.<br>
 <br>
 
 ## 🖥️ &nbsp; Screenshots
-### Telegram bot notifications <br>
-<img src="docs/images/telegram_01.png" alt="ModHeader" width="300"/>
-<img src="docs/images/telegram_02.png" alt="ModHeader" width="300"/>
+![Books List](docs/images/books_list.png)
 
-   
+![Book Detail](docs/images/book_detail.png)
+
+![Borrowings List](docs/images/borrowings_list.png)
+
+![Borrowings Detail](docs/images/borrowing_detail.png)
+
+![Payments List](docs/images/payments_list.png)
+
+![Payments Detail](docs/images/payment_detail.png)
+
+![Stripe](docs/images/stripe.png)
+
+![Telegram](docs/images/telegram.png)
+
+
 <br>
 
 ## 🖋️ &nbsp; Author
