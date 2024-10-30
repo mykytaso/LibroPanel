@@ -8,8 +8,8 @@ The Library API Service enables staff to manage a book collection by adding and 
 <br>
 
 ## 📽️ &nbsp; YouTube Overview
-### <a href="https://youtu.be/ms4_s28IR2k" target="_blank">Watch the video</a>
-> I recommend using at least 1.5x playback speed. 
+### <a href="https://youtu.be/91DA3AnbIDQ" target="_blank">Watch demo video</a>
+
 
 <br>
 
