@@ -198,12 +198,17 @@ Replace `<your token>` with your token.<br>
 
 <img src="docs/images/telegram.png" alt="ModHeader" width="500"/>
 
+
 <br>
+
 
 ## ⛙ &nbsp; Git Workflow
 For development, I used the Git Feature Branch Workflow.<br>
 
 <img src="docs/images/git.png" alt="ModHeader" height="500"/>
+
+
+<br>
 
 
 ## ✍️ &nbsp; Author
