@@ -39,6 +39,7 @@ class Payment(models.Model):
                 name="unique_payment_borrowing_and_payment_type",
             ),
         ]
+        ordering = ("id",)
 
     def __str__(self):
         return (

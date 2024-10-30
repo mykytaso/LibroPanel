@@ -12,6 +12,9 @@ class Borrowing(models.Model):
     actual_return_date = models.DateField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ("id",)
+
     def __str__(self):
         return (
             f"On {self.borrow_date} {self.user} borrowed {self.book}. "
