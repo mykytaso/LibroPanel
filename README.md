@@ -86,6 +86,7 @@ Replace `<your token>` with your token.<br>
 ## 📡 &nbsp; Available Endpoints
 
 - Admin panel: `/admin/`
+<br>
 
 
 - Register a new user: `/api/users/`
@@ -93,15 +94,18 @@ Replace `<your token>` with your token.<br>
 - Refresh token: `/api/users/token/refresh/`
 - Verify token: `/api/users/token/verify/`
 - View user information: `/api/users/me/`
-- 
+<br>
+
 
 - Books list: `/api/books/`
 - Book detail: `/api/books/<id>/`
+<br>
 
 
 - Borrowings list: `/api/borrowings/`
 - Borrowing detail: `/api/borrowings/<id>/`
 - Return borrowing: `/api/borrowings/1/return/`
+<br>
 
 
 - Payments list: `/api/payments/`
