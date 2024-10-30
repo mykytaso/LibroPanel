@@ -5,13 +5,13 @@
 
 The Library API Service enables staff to manage a book collection by adding and updating available titles. Customers can borrow books, make payments for borrowed books, and pay overdue fees if necessary. The service also integrates with a Telegram bot for sending notifications.
 
-Technologies
-Django
-Django REST
-PostgreSQL
-Selery
-Redis
-Stripe
+### Technologies
+- Django
+- Django REST Framework
+- PostgreSQL
+- Selery
+- Redis
+- Stripe
 
 
 <br>
@@ -199,6 +199,12 @@ Replace `<your token>` with your token.<br>
 <img src="docs/images/telegram.png" alt="ModHeader" width="500"/>
 
 <br>
+
+## ⛙ &nbsp; Git Workflow
+For development, I used the Git Feature Branch Workflow.<br>
+
+<img src="docs/images/git.png" alt="ModHeader" height="500"/>
+
 
 ## ✍️ &nbsp; Author
 <img src="https://github.com/mykyta-so.png" alt="@mykyta-so" width="24" height="24" valign="bottom" /> Mykyta Soloviov <a href="https://github.com/mykyta-so">@mykyta-so</a>
