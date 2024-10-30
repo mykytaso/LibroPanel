@@ -21,6 +21,7 @@ class Book(models.Model):
                 name="unique_title_and_author",
             ),
         ]
+        ordering = ("id",)
 
     def borrow_one_copy(self) -> None:
         self.copies -= 1
