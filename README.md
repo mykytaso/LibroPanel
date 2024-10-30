@@ -5,16 +5,25 @@
 
 The Library API Service enables staff to manage a book collection by adding and updating available titles. Customers can borrow books, make payments for borrowed books, and pay overdue fees if necessary. The service also integrates with a Telegram bot for sending notifications.
 
+Technologies
+Django
+Django REST
+PostgreSQL
+Selery
+Redis
+Stripe
+
+
 <br>
 
-## 📽️ &nbsp; YouTube Overview
+## 🍿 &nbsp; YouTube Overview
 ### <a href="https://youtu.be/91DA3AnbIDQ" target="_blank">Watch demo video</a>
 
 
 <br>
 
 
-## 🐳 &nbsp; Run with Docker
+## 📦 &nbsp; Installation with Docker
 
 > **Important:**  Make sure [Docker](https://www.docker.com/) is installed and running.
 
@@ -83,6 +92,14 @@ Replace `<your token>` with your token.<br>
 
 <br>
 
+## 🤖 &nbsp; Telegram bot
+`@Library_Yrarbil_bot` 
+
+<img src="docs/images/bot.png" alt="ModHeader" width="200"/><br>
+
+<br>
+
+
 ## 📡 &nbsp; Available Endpoints
 
 - Admin panel: `/admin/`
@@ -127,13 +144,13 @@ Replace `<your token>` with your token.<br>
 - Admin panel accessible at `/admin/`.
 - API documentation with Swagger and Redoc.
 - To prevent data loss, media files and the database are stored inside Docker volumes.
-- wait_for_db feature to ensure the database is ready before starting services.
-- Customer can only view their own borrowings and payments.
+- `wait_for_db` feature to ensure the database is ready before starting services.
+- Customers can only view their own borrowings and payments.
 <br>
 
 - **Filtering**
-  - Customers: Filter borrowings by status with `/?is_active=(true or false)`.
-  - Staff: Additional filtering by user_id with `/?is_active=(true or false)&user_id=<id>`.
+  - Customers can filter borrowings by `is_active`. Example: `/?is_active=(true or false)`.
+  - Staff can filter borrowings by `is_active` and `user_id`. Example: `/?is_active=(true or false)&user_id=<id>`.
 <br>
 
 - **Validation**
@@ -183,5 +200,5 @@ Replace `<your token>` with your token.<br>
 
 <br>
 
-## 🖋️ &nbsp; Author
+## ✍️ &nbsp; Author
 <img src="https://github.com/mykyta-so.png" alt="@mykyta-so" width="24" height="24" valign="bottom" /> Mykyta Soloviov <a href="https://github.com/mykyta-so">@mykyta-so</a>
