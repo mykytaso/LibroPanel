@@ -88,7 +88,6 @@ Replace `<your token>` with your token.<br>
 - Admin panel: `/admin/`
 <br>
 
-
 - Register a new user: `/api/users/`
 - Obtain refresh and access tokens: `/api/users/token/`
 - Refresh token: `/api/users/token/refresh/`
@@ -96,17 +95,14 @@ Replace `<your token>` with your token.<br>
 - View user information: `/api/users/me/`
 <br>
 
-
 - Books list: `/api/books/`
 - Book detail: `/api/books/<id>/`
 <br>
-
 
 - Borrowings list: `/api/borrowings/`
 - Borrowing detail: `/api/borrowings/<id>/`
 - Return borrowing: `/api/borrowings/1/return/`
 <br>
-
 
 - Payments list: `/api/payments/`
 - Pyment detail: `/api/payments/<id>/`
@@ -133,42 +129,46 @@ Replace `<your token>` with your token.<br>
 - To prevent data loss, media files and the database are stored inside Docker volumes.
 - wait_for_db feature to ensure the database is ready before starting services.
 - Customer can only view their own borrowings and payments.
+<br>
 
+- **Filtering**
+  - Customers: Filter borrowings by status with `/?is_active=(true or false)`.
+  - Staff: Additional filtering by user_id with `/?is_active=(true or false)&user_id=<id>`.
+<br>
 
-
-- Filtering
-  - **Customers:** Filter borrowings by status with `/?is_active=(true or false)`.
-  - **Staff:** Additional filtering by user_id with `/?is_active=(true or false)&user_id=<id>`.
-
-
-
-
-- Validation
+- **Validation**
   - Protection against duplicate book and author combinations.
   - Prevents creating a borrowing if:
     - No copies of the book are available. 
     - The expected return date is earlier than the borrowing date. 
     - The customer has unpaid borrowings or overdue payments. 
+<br>
 
-
-- Telegram bot notifications for key events:
+- **Telegram bot notifications for key events**
   - Borrowing and returning books.
   - Daily reminders for return deadlines and overdue alerts (handled with Celery periodic tasks).
   - Unpaid checkout sessions.
   - Payment confirmations.
+<br>
 
-
-- Payments
+- **Payments**
   - Payments are processed through Stripe.
   - Automatic checkout session creation for each borrowing transaction.
   - Additional checkout session creation during the return process if the customer has overdue fees.
-
 
 
 <br>
 
 ## 🔗 &nbsp; Database diagram
 ![Diagram](docs/images/db_diagram.png)
+
+<br>
+
+## 🖥️ &nbsp; Screenshots
+### Telegram bot notifications <br>
+<img src="docs/images/telegram_01.png" alt="ModHeader" width="300"/>
+<img src="docs/images/telegram_02.png" alt="ModHeader" width="300"/>
+
    
 <br>
 
