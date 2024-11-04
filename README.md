@@ -58,7 +58,7 @@ Use the `/api/users/token/` endpoint to obtain access token.
 The access token can be used in [Postman](https://www.postman.com/) or with the [ModHeader](https://chromewebstore.google.com/detail/modheader-modify-http-hea/idgpnmonknjnojddfkpgkljpfnnfcklj?hl=en) extension for Google Chrome.
 
 **ModHeader Example:**<br>
-Replace `<your token>` with your token.<br>
+Replace `<your token>` with your access token.<br>
 <img src="docs/images/modheader.png" alt="ModHeader" width="460"/>
 
 <br>
