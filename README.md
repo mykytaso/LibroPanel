@@ -3,7 +3,7 @@
 ## API service for library management.
 
 
-The Library API Service enables staff to manage a book collection by adding and updating available titles. Customers can borrow books, make payments for borrowed books, and pay overdue fees if necessary. The service also integrates with a Telegram bot for sending notifications.
+Library API Service - allows staff to manage the book collection and lets customers borrow and return books, as well as make payments for borrowing and overdue fees. The service also integrates with a Telegram bot to send notifications.
 
 ### Technologies
 - Django
@@ -212,4 +212,4 @@ For development, I used the Git Feature Branch Workflow.<br>
 
 
 ## ✍️ &nbsp; Author
-<img src="https://github.com/mykyta-so.png" alt="@mykyta-so" width="24" height="24" valign="bottom" /> Mykyta Soloviov <a href="https://github.com/mykyta-so">@mykyta-so</a>
+<img src="https://github.com/mykytaso.png" alt="@mykytaso" width="24" height="24" valign="bottom" /> Mykyta Soloviov <a href="https://github.com/mykytaso">@mykytaso</a>
