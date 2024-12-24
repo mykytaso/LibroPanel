@@ -1,9 +1,9 @@
-# Library API Service
+# Library Service API
 
 ## API service for library management.
 
 
-Library API Service - allows staff to manage the book collection and lets customers borrow and return books, as well as make payments for borrowing and overdue fees. The service also integrates with a Telegram bot to send notifications.
+Library Service API - allows staff to manage the book collection and lets customers borrow and return books, as well as make payments for borrowing and overdue fees. The service also integrates with a Telegram bot to send notifications.
 
 ### Technologies
 - Django
