@@ -6,12 +6,14 @@
 Library Service API - allows staff to manage the book collection and lets customers borrow and return books, as well as make payments for borrowing and overdue fees. The service also integrates with a Telegram bot to send notifications.
 
 ### Technologies
-- Django
-- Django REST Framework
-- PostgreSQL
-- Selery
-- Redis
-- Stripe
+- Django, Django REST Frameworks.
+- PostgreSQL.
+- Docker, Docker Compose.
+- Swagger, Redoc.
+- Selery (Distributed Task Queue).
+- Redis.
+- Stripe (Payment Processing).
+- Telegram API.
 
 
 <br>
