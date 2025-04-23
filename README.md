@@ -1,9 +1,9 @@
-# Library Service API
+# LibroPanel
 
 ## API service for library management.
 
 
-Library Service API - allows staff to manage the book collection and lets customers borrow and return books, as well as make payments for borrowing and overdue fees. The service also integrates with a Telegram bot to send notifications.
+LibroPanel - allows staff to manage the book collection and lets customers borrow and return books, as well as make payments for borrowing and overdue fees. The service also integrates with a Telegram bot to send notifications.
 
 ### Technologies
 - Django, Django REST Frameworks.
@@ -40,7 +40,7 @@ Library Service API - allows staff to manage the book collection and lets custom
     docker-compose up -d --build
     ```
    
-3. Create a `superuser` account to access the Airport API Service:
+3. Create a `superuser` account to access LibroPanel:
    ```shell
      docker-compose exec app python manage.py createsuperuser
    ```
